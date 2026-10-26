@@ -86,12 +86,12 @@ that's just the overview of tcachebins, but literally like that and then we will
 <br>
 `tcachebins 0x110 [2]: B->C->0` (because we already reused chunk A)
 <br>
-After that, we will fill chunk A with anything until `0x110` byte. what happen next? Yeah, absolutely true, `null-byte-off overflow` will overwrite size chunk B, from `0x110` -> `0x100`.<br>
+After that, we will fill chunk A with anything until `0x110` byte. what happen next? Yeah, absolutely true, `null-byte-off overflow` will overwrite size chunk B, from `0x110` -> `0x100`. <br>
 <br>
 What's the effect? It mean if we `free(chunk B)` again, tcache won't see that as `double free`, huh why? because tcache see chunk B in `0x100` byte not `0x110` byte, so literally we're doing `double free` same chunk but different size, so in the tcachebins it would be like this.<br>
 <br>
-`tcachebins 0x100 [1]: B->C`<br>
-`tcachebins 0x110 [2]: B->C->0`<br>
+`tcachebins 0x100 [1]: B->C` <br>
+`tcachebins 0x110 [2]: B->C->0` <br>
 <br>
 And then if we create a chunk with size `0x100` it mean we will take chunk B in tcache `0x100` what happen with chunk B in thread `0x110`? Nothing happened with it, it still stay at there, the difference is we have control on that heap, if we write first byte until eight byte of chunk B, it will overwrite `fd` address that should be chunk C will be whatever we want, we got arbitrary write.<br>
 <br>
