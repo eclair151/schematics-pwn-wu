@@ -31,7 +31,7 @@ After I checked the protection, I start to diassembled this binary file into pse
 <br>
 - CREATE_NOTES<br>
 <br>
-![alt text](/iamges/image-1.png)<br>
+![alt text](/images/image-1.png)<br>
 <br>
 - DELETE_NOTES<br>
 <br>
