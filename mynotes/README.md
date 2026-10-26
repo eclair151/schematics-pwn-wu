@@ -47,17 +47,22 @@ Basically, it just setup what `syscall` can we use and `find_empty` just check h
 Okay, after several times to look up at the pseudo-code, finally, I found where the bugs are:<br>
 <br>
 - Double Free<br>
+
 ```c
 free(*(void **)(note + (long)local_18 * 0x10 + 8));
-note[(long)local_18 * 0x10] = 1
+note[(long)local_18 * 0x10] = 1;
 ```
+
 - Format String Attack
+  
 ```c
 printf("Note %d: ",(ulong)local_18);
 if (note[(long)(int)local_18 * 0x10] == '\0') {
     printf(*(char **)(note + (long)(int)local_18 * 0x10 + 8));
 ```
+
 - Null-byte-Off overflow (kinda hidden)
+
 ```c
 *(void **)(note + (long)local_20 * 0x10 + 8) = local_18;
 note[(long)local_20 * 0x10] = 0;
@@ -67,6 +72,7 @@ local_1c = (int)sVar1;
 *(undefined1 *)((long)local_18 + (long)local_1c) = 0;
 puts("OK!");
 ```
+
 Okay, I'll explain first, why we have these vulnerables, first one is `double free` since the code doesn't make the variable that hold heap address into `NULL`, we still have that memory that hold illegal area.<br>
 And then for the `format string attack` I think it's kinda easy to tell because the `printf` didn't take any format specifier to tell program what it should print out.<br>
 Last one, is `One-Byte-Null Overflow` kinda interesting because I need look it closely to figure it out.<br>
