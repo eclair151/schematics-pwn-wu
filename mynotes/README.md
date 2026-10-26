@@ -16,7 +16,7 @@ so I used `pwninit` to make my local binary file use those `libc` and `ld` file 
 <br>
 At first, I checked the binary file in `pwnchecksec` to see the protection on this binary file.<br>
 <br>
-![alt text](image.png)<br>
+![alt text](./images/image.png)<br>
 <br>
 as we can see this binary has full protection.<br>
 
@@ -31,15 +31,15 @@ After I checked the protection, I start to diassembled this binary file into pse
 <br>
 - CREATE_NOTES<br>
 <br>
-![alt text](image-1.png)<br>
+![alt text](./iamges/image-1.png)<br>
 <br>
 - DELETE_NOTES<br>
 <br>
-![alt text](image-2.png)<br>
+![alt text](./images/image-2.png)<br>
 <br>
 - READ_NOTES<br>
 <br>
-![alt text](image-3.png)<br>
+![alt text](./images/image-3.png)<br>
 <br>
 And actually there is another function those are `setup_seccomp` and `find_empty`.<br>
 Basically, it just setup what `syscall` can we use and `find_empty` just check how many chunk on the `heap` and the function said max 7.<br>
@@ -48,24 +48,24 @@ Okay, after several times to look up at the pseudo-code, finally, I found where 
 <br>
 - Double Free<br>
 ```c
-    free(*(void **)(note + (long)local_18 * 0x10 + 8));
-    note[(long)local_18 * 0x10] = 1
+free(*(void **)(note + (long)local_18 * 0x10 + 8));
+note[(long)local_18 * 0x10] = 1
 ```
 - Format String Attack
 ```c
-    printf("Note %d: ",(ulong)local_18);
-    if (note[(long)(int)local_18 * 0x10] == '\0') {
-      printf(*(char **)(note + (long)(int)local_18 * 0x10 + 8));
+printf("Note %d: ",(ulong)local_18);
+if (note[(long)(int)local_18 * 0x10] == '\0') {
+    printf(*(char **)(note + (long)(int)local_18 * 0x10 + 8));
 ```
 - Null-byte-Off overflow (kinda hidden)
 ```c
-      *(void **)(note + (long)local_20 * 0x10 + 8) = local_18;
-      note[(long)local_20 * 0x10] = 0;
-      printf("Note: ");
-      sVar1 = read(0,local_18,(long)local_24);
-      local_1c = (int)sVar1;
-      *(undefined1 *)((long)local_18 + (long)local_1c) = 0;
-      puts("OK!");
+*(void **)(note + (long)local_20 * 0x10 + 8) = local_18;
+note[(long)local_20 * 0x10] = 0;
+printf("Note: ");
+sVar1 = read(0,local_18,(long)local_24);
+local_1c = (int)sVar1;
+*(undefined1 *)((long)local_18 + (long)local_1c) = 0;
+puts("OK!");
 ```
 Okay, I'll explain first, why we have these vulnerables, first one is `double free` since the code doesn't make the variable that hold heap address into `NULL`, we still have that memory that hold illegal area.<br>
 And then for the `format string attack` I think it's kinda easy to tell because the `printf` didn't take any format specifier to tell program what it should print out.<br>
@@ -275,9 +275,9 @@ io.interactive()
 ```
 If I start it on local env. I'll get the flag.<br>
 <br>
-![alt text](image-4.png)<br>
+![alt text](./images/image-4.png)<br>
 <br>
-Hell yeah, that's all
+Hell yeah, that's all<br>
 
 >Disclaimer<br>
 Maybe there's something you don't understand, but feel free to ask
