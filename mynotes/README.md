@@ -16,7 +16,7 @@ so I used `pwninit` to make my local binary file use those `libc` and `ld` file 
 <br>
 At first, I checked the binary file in `pwnchecksec` to see the protection on this binary file.<br>
 <br>
-![alt text](./images/image.png)<br>
+![alt text](/images/image.png)<br>
 <br>
 as we can see this binary has full protection.<br>
 
