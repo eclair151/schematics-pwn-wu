@@ -31,15 +31,15 @@ After I checked the protection, I start to diassembled this binary file into pse
 <br>
 - CREATE_NOTES<br>
 <br>
-![alt text](./iamges/image-1.png)<br>
+![alt text](/iamges/image-1.png)<br>
 <br>
 - DELETE_NOTES<br>
 <br>
-![alt text](./images/image-2.png)<br>
+![alt text](/images/image-2.png)<br>
 <br>
 - READ_NOTES<br>
 <br>
-![alt text](./images/image-3.png)<br>
+![alt text](/images/image-3.png)<br>
 <br>
 And actually there is another function those are `setup_seccomp` and `find_empty`.<br>
 Basically, it just setup what `syscall` can we use and `find_empty` just check how many chunk on the `heap` and the function said max 7.<br>
@@ -275,7 +275,7 @@ io.interactive()
 ```
 If I start it on local env. I'll get the flag.<br>
 <br>
-![alt text](./images/image-4.png)<br>
+![alt text](/images/image-4.png)<br>
 <br>
 Hell yeah, that's all<br>
 
