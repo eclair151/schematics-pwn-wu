@@ -30,23 +30,30 @@ as we can see this binary has full protection.<br>
 After I checked the protection, I start to diassembled this binary file into pseudo-C-code using `Ghidra`.<br>
 <br>
 - CREATE_NOTES<br>
+
 <br>
 ![alt text](/images/image-1.png)<br>
 <br>
+
 - DELETE_NOTES<br>
+
 <br>
 ![alt text](/images/image-2.png)<br>
 <br>
+
 - READ_NOTES<br>
+
 <br>
 ![alt text](/images/image-3.png)<br>
 <br>
+
 And actually there is another function those are `setup_seccomp` and `find_empty`.<br>
 Basically, it just setup what `syscall` can we use and `find_empty` just check how many chunk on the `heap` and the function said max 7.<br>
 <br>
 Okay, after several times to look up at the pseudo-code, finally, I found where the bugs are:<br>
 <br>
-- Double Free<br>
+
+- Double Free
 
 ```c
 free(*(void **)(note + (long)local_18 * 0x10 + 8));
